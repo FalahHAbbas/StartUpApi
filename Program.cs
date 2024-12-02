@@ -12,7 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<StartupContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresCon")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Local")));
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();

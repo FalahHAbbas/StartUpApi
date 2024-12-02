@@ -19,7 +19,8 @@ public class UserService(IUserRepository userRepository) : IUserService
             Id = Guid.NewGuid(),
             Username = userForm.Username,
             Email = userForm.Email,
-            PhoneNumber = userForm.PhoneNumber
+            PhoneNumber = userForm.PhoneNumber,
+            Password = userForm.Password
         };
 
         user = await userRepository.Create(user);
