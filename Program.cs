@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using StartUpApi.Data;
 using StartUpApi.Data.Repositories;
 using StartUpApi.Services;
 
@@ -9,6 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+builder.Services.AddDbContext<StartupContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresCon")));
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
