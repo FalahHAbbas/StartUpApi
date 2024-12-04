@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using StartUpApi.Models.Dto;
 using StartUpApi.Models.Entities;
 using StartUpApi.Models.Form;
@@ -7,7 +9,7 @@ namespace StartUpApi.Data.Repositories;
 public interface IUserRepository
 {
     Task<User> Create(User user);
-    Task<User> Update(Guid id, User user);
+    Task<User> Update(User user);
     Task<User> Delete(Guid id);
     Task<User> FindById(Guid id);
     Task<List<User>> FindAll();
@@ -24,23 +26,35 @@ public class UserRepository(StartupContext context) : IUserRepository
         return user;
     }
 
-    public Task<User> Update(Guid id, User userForm)
+    public async Task<User> Update(User user)
     {
-        throw new NotImplementedException();
+         _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+        return user;
     }
 
-    public Task<User> Delete(Guid id)
+    public async Task<User> Delete(Guid id)
+
     {
-        throw new NotImplementedException();
+        var user = await _context.Users.FindAsync(id);
+        if (user == null)
+            throw new Exception("user not found");
+        _context.Users.Remove(user);
+        await _context.SaveChangesAsync();
+        return user;
+
     }
 
-    public Task<User> FindById(Guid id)
+    public async Task<User> FindById(Guid id)
+
     {
-        throw new NotImplementedException();
+        return await _context.Users.FindAsync(id);
     }
 
-    public Task<List<User>> FindAll()
+    public async Task<List<User>> FindAll()
     {
-        throw new NotImplementedException();
+        var user = await _context.Users.ToListAsync();
+        return user;
+
     }
 }
