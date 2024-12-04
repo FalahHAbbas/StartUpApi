@@ -18,6 +18,7 @@ public class UserController(IUserService userService) : ControllerBase
         return Ok(user);
     }
 
+    
     [HttpPut("{id}")]
 
     public async Task<ActionResult<UserDto>> Update(Guid id, [FromBody] UserForm userForm)
