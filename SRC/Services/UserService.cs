@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using StartUpApi.Data.Repositories;
 using StartUpApi.Models.Dto;
 using StartUpApi.Models.Entities;
@@ -12,7 +13,7 @@ public interface IUserService
     Task<UserDto> Delete(Guid id);
     Task<UserDto> GetById(Guid id);
 
-    Task<List<UserDto>> GetAll();
+    Task<List<UserDto>> GetAll(int pageNumber ,int pageSize);
 }
 
 public class UserService(IUserRepository userRepository) : IUserService
@@ -53,10 +54,10 @@ public class UserService(IUserRepository userRepository) : IUserService
 
     }
 
-    public async Task<List<UserDto>> GetAll()
+    public async Task<List<UserDto>> GetAll(int pageNumber ,int pageSize)
     {
-
-        var users = await userRepository.FindAll();
+         
+        var users = await userRepository.GetUsersAsync(pageNumber, pageSize);
         var userDtos = new List<UserDto>();
         foreach (var user in users)
         {
@@ -70,6 +71,8 @@ public class UserService(IUserRepository userRepository) : IUserService
             userDtos.Add(userDto);
             
         }
+        
+        
         return userDtos;
 
     }
@@ -115,6 +118,8 @@ public class UserService(IUserRepository userRepository) : IUserService
 
 
     }
+
+   
 
     
 }

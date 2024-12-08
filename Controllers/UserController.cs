@@ -32,18 +32,19 @@ public class UserController(IUserService userService) : ControllerBase
         var user = await userService.Delete(id);
         return Ok(user);
     }
-    [HttpGet]
-    public async Task<ActionResult<List<UserDto>>> GetAll()
-    {
-        var user = await userService.GetAll();
-        return Ok(user);
-
-    }
+    
     [HttpGet("{id}")]
     public async Task<ActionResult<UserDto>> GetById(Guid id)
     {
         var user = await userService.GetById(id);
         return Ok(user);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<List<UserDto>>> GetAll(int pageNumber ,int pageSize,string sortColumn, string sortDiretion)
+    {
+        var users = await userService.GetAll(pageNumber, pageSize, sortColumn, sortDiretion);
+        return Ok(users);
     }
 
 

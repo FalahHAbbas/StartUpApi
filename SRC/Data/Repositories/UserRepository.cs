@@ -12,7 +12,8 @@ public interface IUserRepository
     Task<User> Update(User user);
     Task<User> Delete(Guid id);
     Task<User> FindById(Guid id);
-    Task<List<User>> FindAll();
+
+    Task<(List<UserDto> data, int totalCount)> GetUsersAsync(IQueryable<User> query, int pageNumber, int pageSize);
 }
 
 public class UserRepository(StartupContext context) : IUserRepository
@@ -49,12 +50,54 @@ public class UserRepository(StartupContext context) : IUserRepository
 
     {
         return await _context.Users.FindAsync(id);
+        
     }
 
-    public async Task<List<User>> FindAll()
+    public async Task<(List<UserDto> data, int totalCount)> GetUsersAsync(IQueryable<User> query, int pageNumber, int pageSize)
     {
-        var user = await _context.Users.ToListAsync();
-        return user;
+        
+        // Count the total number of users
+        var totalCount = await query.CountAsync();
 
+        // If pageSize is 0, return all users without pagination
+        if (pageSize == 0)
+        {
+            var data = await query
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    Username = u.Username,
+                    Email = u.Email,
+                    
+                    // Add other necessary mappings here
+                })
+                .ToListAsync();
+
+            return (data, totalCount);
+        }
+
+        var pagedData = pageNumber == 0
+            ? await query
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    Username = u.Username,
+                    Email = u.Email,
+                    // Add other necessary mappings here
+                })
+                .ToListAsync()
+            : await query
+                .Skip(pageSize * (pageNumber - 1))
+                .Take(pageSize)
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    Username = u.Username,
+                    Email = u.Email,
+                    // Add other necessary mappings here
+                })
+                .ToListAsync();
+
+        return (pagedData, totalCount);
     }
 }
