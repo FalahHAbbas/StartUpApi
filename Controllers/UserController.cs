@@ -18,21 +18,21 @@ public class UserController(IUserService userService) : ControllerBase
         return Ok(user);
     }
 
-    
-    [HttpPut("{id}")]
 
+    [HttpPut("{id}")]
     public async Task<ActionResult<UserDto>> Update(Guid id, [FromBody] UserForm userForm)
     {
         var user = await userService.Update(id, userForm);
         return Ok(user);
     }
+
     [HttpDelete]
     public async Task<ActionResult<UserDto>> Delete(Guid id)
     {
         var user = await userService.Delete(id);
         return Ok(user);
     }
-    
+
     [HttpGet("{id}")]
     public async Task<ActionResult<UserDto>> GetById(Guid id)
     {
@@ -41,11 +41,15 @@ public class UserController(IUserService userService) : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<UserDto>>> GetAll(int pageNumber ,int pageSize,string sortColumn, string sortDiretion)
+    public async Task<ActionResult<Page<UserDto>>> GetAll(int pageNumber, int pageSize)
     {
-        var users = await userService.GetAll(pageNumber, pageSize, sortColumn, sortDiretion);
-        return Ok(users);
+        var users = await userService.GetAll(pageNumber, pageSize);
+        var page = new Page<UserDto>
+        {
+            Items = users.data,
+            CurrentPage = pageNumber,
+            PageCount = ((users.totalCount - 1) / pageSize) + 1
+        };
+        return Ok(page);
     }
-
-
-}   
+}
