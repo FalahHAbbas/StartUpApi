@@ -10,5 +10,5 @@ public class User
     public string Password { get; set; }
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
-    public DateTime createdAt { get; set; } = DateTime.Now;
+    public DateTime createdAt { get; set; } = DateTime.Now.ToUniversalTime();
 }
