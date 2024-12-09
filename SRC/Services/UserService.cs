@@ -13,7 +13,7 @@ public interface IUserService
     Task<UserDto> Delete(Guid id);
     Task<UserDto> GetById(Guid id);
 
-    Task<(List<UserDto> data, int totalCount)> GetAll(int pageNumber, int pageSize);
+    Task<(List<UserDto> data, int totalCount)> GetAll(int pageNumber, int pageSize, string name);
 }
 
 public class UserService(IUserRepository userRepository) : IUserService
@@ -53,9 +53,9 @@ public class UserService(IUserRepository userRepository) : IUserService
         };
     }
 
-    public async Task<(List<UserDto> data, int totalCount)> GetAll(int pageNumber, int pageSize)
+    public async Task<(List<UserDto> data, int totalCount)> GetAll(int pageNumber, int pageSize, string name)
     {
-        var result = await userRepository.GetUsers(pageNumber, pageSize);
+        var result = await userRepository.GetUsers(pageNumber, pageSize, name);
         var userDtos = new List<UserDto>();
         foreach (var user in result.data)
         {
@@ -64,7 +64,8 @@ public class UserService(IUserRepository userRepository) : IUserService
                 Id = user.Id,
                 Username = user.Username,
                 Email = user.Email,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                createdAt = user.createdAt,
             };
             userDtos.Add(userDto);
         }
@@ -80,7 +81,8 @@ public class UserService(IUserRepository userRepository) : IUserService
             Id = user.Id,
             Username = user.Username,
             Email = user.Email,
-            PhoneNumber = user.PhoneNumber
+            PhoneNumber = user.PhoneNumber,
+            createdAt = user.createdAt,
         };
     }
 

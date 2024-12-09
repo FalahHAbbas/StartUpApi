@@ -1,7 +1,20 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\huawei\\source\\repos\\StartUpApi\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{5869E249-EEA4-41A6-A583-8E344335C453}|StartUpApi.csproj|c:\\users\\huawei\\source\\repos\\startupapi\\src\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5869E249-EEA4-41A6-A583-8E344335C453}|StartUpApi.csproj|solutionrelative:src\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5869E249-EEA4-41A6-A583-8E344335C453}|StartUpApi.csproj|c:\\users\\huawei\\source\\repos\\startupapi\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5869E249-EEA4-41A6-A583-8E344335C453}|StartUpApi.csproj|solutionrelative:controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5869E249-EEA4-41A6-A583-8E344335C453}|StartUpApi.csproj|c:\\users\\huawei\\source\\repos\\startupapi\\src\\data\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5869E249-EEA4-41A6-A583-8E344335C453}|StartUpApi.csproj|solutionrelative:src\\data\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,11 +22,49 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "C:\\Users\\huawei\\source\\repos\\StartUpApi\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "Controllers\\UserController.cs",
+              "ToolTip": "C:\\Users\\huawei\\source\\repos\\StartUpApi\\Controllers\\UserController.cs",
+              "RelativeToolTip": "Controllers\\UserController.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAADMAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-04T13:24:39.062Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "C:\\Users\\huawei\\source\\repos\\StartUpApi\\SRC\\Services\\UserService.cs",
+              "RelativeDocumentMoniker": "SRC\\Services\\UserService.cs",
+              "ToolTip": "C:\\Users\\huawei\\source\\repos\\StartUpApi\\SRC\\Services\\UserService.cs",
+              "RelativeToolTip": "SRC\\Services\\UserService.cs",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAwwGsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-03T16:12:33.654Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UserRepository.cs",
+              "DocumentMoniker": "C:\\Users\\huawei\\source\\repos\\StartUpApi\\SRC\\Data\\Repositories\\UserRepository.cs",
+              "RelativeDocumentMoniker": "SRC\\Data\\Repositories\\UserRepository.cs",
+              "ToolTip": "C:\\Users\\huawei\\source\\repos\\StartUpApi\\SRC\\Data\\Repositories\\UserRepository.cs",
+              "RelativeToolTip": "SRC\\Data\\Repositories\\UserRepository.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAcwDIAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-03T17:29:14.183Z"
             }
           ]
         }

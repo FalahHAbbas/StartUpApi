@@ -13,7 +13,7 @@ public interface IUserRepository
     Task<User> Delete(Guid id);
     Task<User> FindById(Guid id);
 
-    Task<(List<UserDto> data, int totalCount)> GetUsers(int pageNumber, int pageSize);
+    Task<(List<UserDto> data, int totalCount)> GetUsers(int pageNumber, int pageSize, string name);
 }
 
 public class UserRepository(StartupContext context) : IUserRepository
@@ -51,9 +51,11 @@ public class UserRepository(StartupContext context) : IUserRepository
         return await _context.Users.FindAsync(id);
     }
 
-    public async Task<(List<UserDto> data, int totalCount)> GetUsers(int pageNumber, int pageSize)
+    public async Task<(List<UserDto> data, int totalCount)> GetUsers(int pageNumber, int pageSize, string? name)
     {
         var users = await _context.Users
+            .Where(user => name== null || user.Username.Contains(name))
+            .OrderByDescending(user => user.createdAt)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -65,7 +67,8 @@ public class UserRepository(StartupContext context) : IUserRepository
             Id = x.Id,
             Username = x.Username,
             Email = x.Email,
-            PhoneNumber = x.PhoneNumber
+            PhoneNumber = x.PhoneNumber,
+            createdAt = x.createdAt,
         }).ToList();
         return (data, totalCount);
     }

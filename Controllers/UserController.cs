@@ -41,9 +41,9 @@ public class UserController(IUserService userService) : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<Page<UserDto>>> GetAll(int pageNumber, int pageSize)
+    public async Task<ActionResult<Page<UserDto>>> GetAll(string? name, int pageNumber = 1, int pageSize= 10)
     {
-        var users = await userService.GetAll(pageNumber, pageSize);
+        var users = await userService.GetAll(pageNumber, pageSize, name);
         var page = new Page<UserDto>
         {
             Items = users.data,
