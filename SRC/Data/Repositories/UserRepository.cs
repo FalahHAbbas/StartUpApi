@@ -67,8 +67,7 @@ public class UserRepository(StartupContext context) : IUserRepository
             Id = x.Id,
             Username = x.Username,
             Email = x.Email,
-            PhoneNumber = x.PhoneNumber,
-            createdAt = x.createdAt,
+            PhoneNumber = x.PhoneNumber
         }).ToList();
         return (data, totalCount);
     }

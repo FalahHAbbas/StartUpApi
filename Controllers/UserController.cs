@@ -52,4 +52,12 @@ public class UserController(IUserService userService) : ControllerBase
         };
         return Ok(page);
     }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<Departement>>GetDepartementById(Guid id);
+
+    {
+        var Departement = await userService.GetDepartementById(id);
+        return Ok(Departement);
+    }
 }
