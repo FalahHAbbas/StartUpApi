@@ -8,8 +8,8 @@ namespace StartUpApi.Data.Repositories;
 
 public interface IDepartementRepository
 {
-    Task<Departement> Create(Departement user);
-    Task<Departement> Update(Departement user);
+    Task<Departement> Create(Departement departement);
+    Task<Departement> Update(Departement departement);
     Task<Departement> Delete(Guid id);
     Task<Departement> FindById(Guid id);
     Task<List<Departement>> GetAll();
@@ -17,23 +17,31 @@ public interface IDepartementRepository
 
 public class DepartementRepository(StartupContext context) : IDepartementRepository
 {
-    private readonly StartupContext _context;
+    private readonly StartupContext _context = context;
 
-    public async Task<Departement> Create(Departement entity)
+    public async Task<Departement> Create(Departement departement)
     {
-        await _context.Departements.AddAsync(entity);
+        await _context.Departements.AddAsync(departement);
         await _context.SaveChangesAsync();
-        return entity;
+        return departement;
     }
 
-    public Task<Departement> Update(Departement user)
+    public async Task<Departement> Update(Departement departement)
     {
-        throw new NotImplementedException();
+        _context.Departements.Update(departement);
+        await _context.SaveChangesAsync();
+        return departement;
     }
 
-    public Task<Departement> Delete(Guid id)
+    public async Task<Departement> Delete(Guid id)
     {
-        throw new NotImplementedException();
+        var departement = await _context.Departements.FindAsync(id);
+        if (departement == null)
+            throw new Exception("Departement not found");
+        _context.Departements.Remove(departement);
+        await _context.SaveChangesAsync();  
+        return departement;
+        
     }
 
     public Task<Departement> FindById(Guid id)

@@ -41,7 +41,7 @@ public class UserController(IUserService userService) : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<Page<UserDto>>> GetAll(string? name, int pageNumber = 1, int pageSize= 10)
+    public async Task<ActionResult<Page<UserDto>>> GetAll(string? name, int pageNumber = 1, int pageSize = 10)
     {
         var users = await userService.GetAll(pageNumber, pageSize, name);
         var page = new Page<UserDto>
@@ -51,13 +51,5 @@ public class UserController(IUserService userService) : ControllerBase
             PageCount = ((users.totalCount - 1) / pageSize) + 1
         };
         return Ok(page);
-    }
-
-    [HttpPut("{id}")]
-    public async Task<ActionResult<Departement>>GetDepartementById(Guid id);
-
-    {
-        var Departement = await userService.GetDepartementById(id);
-        return Ok(Departement);
     }
 }
