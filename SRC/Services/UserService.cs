@@ -1,3 +1,4 @@
+using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using StartUpApi.Data.Repositories;
 using StartUpApi.Models.Dto;
@@ -16,74 +17,34 @@ public interface IUserService
     Task<(List<UserDto> data, int totalCount)> GetAll(int pageNumber, int pageSize, string name);
 }
 
-public class UserService(IUserRepository userRepository) : IUserService
+public class UserService(IUserRepository userRepository , IMapper mapper) : IUserService
 {
     public async Task<UserDto> Create(UserForm userForm)
     {
-        var user = new User
-        {
-            Id = Guid.NewGuid(),
-            Username = userForm.Username,
-            Email = userForm.Email,
-            PhoneNumber = userForm.PhoneNumber,
-            Password = userForm.Password
-        };
-
-        user = await userRepository.Create(user);
-
-        return new UserDto
-        {
-            Id = user.Id,
-            Username = user.Username,
-            Email = user.Email,
-            PhoneNumber = user.PhoneNumber
-        };
+       var user = mapper.Map<User>(userForm);
+       user = await userRepository.Create(user);
+       return mapper.Map<UserDto>(user);
     }
 
     public async Task<UserDto> Delete(Guid id)
     {
-        var user = await userRepository.Delete(id);
+        var user = mapper.Map<User>(await GetById(id));
+        user = await userRepository.Delete(id);
+        return mapper.Map<UserDto>(user);
 
-        return new UserDto
-        {
-            Id = user.Id,
-            Username = user.Username,
-            Email = user.Email,
-            PhoneNumber = user.PhoneNumber
-        };
     }
 
     public async Task<(List<UserDto> data, int totalCount)> GetAll(int pageNumber, int pageSize, string name)
     {
         var result = await userRepository.GetUsers(pageNumber, pageSize, name);
-        var userDtos = new List<UserDto>();
-        foreach (var user in result.data)
-        {
-            var userDto = new UserDto
-            {
-                Id = user.Id,
-                Username = user.Username,
-                Email = user.Email,
-                PhoneNumber = user.PhoneNumber,
-                createdAt = user.createdAt,
-            };
-            userDtos.Add(userDto);
-        }
-
+        var userDtos = mapper.Map<List<UserDto>>(result.data);
         return (userDtos, result.totalCount);
     }
 
     public async Task<UserDto> GetById(Guid id)
     {
         var user = await userRepository.FindById(id);
-        return new UserDto
-        {
-            Id = user.Id,
-            Username = user.Username,
-            Email = user.Email,
-            PhoneNumber = user.PhoneNumber,
-            createdAt = user.createdAt,
-        };
+        return mapper.Map<UserDto>(user);
     }
 
 
@@ -95,19 +56,8 @@ public class UserService(IUserRepository userRepository) : IUserService
         {
             throw new Exception("User not found");
         }
-
-        user.Username = userForm.Username;
-        user.Email = userForm.Email;
-        user.PhoneNumber = userForm.PhoneNumber;
-        user.Password = userForm.Password;
-
+        user = mapper.Map(userForm, user);
         user = await userRepository.Update(user);
-        return new UserDto
-        {
-            Id = user.Id,
-            Username = user.Username,
-            Email = user.Email,
-            PhoneNumber = user.PhoneNumber
-        };
+        return mapper.Map<UserDto>(user);
     }
 }

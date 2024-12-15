@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using StartUpApi.Models.Dto;
 using StartUpApi.Models.Entities;
 using StartUpApi.Models.Form;
@@ -12,7 +13,8 @@ public interface IDepartementRepository
     Task<Departement> Update(Departement departement);
     Task<Departement> Delete(Guid id);
     Task<Departement> FindById(Guid id);
-    Task<List<Departement>> GetAll();
+    Task<(List<DepartementDto> data, int totalDepartements)> GetAll(int pageSize = 10, int pageNumber = 0);
+    
     
 }
 
@@ -50,9 +52,19 @@ public class DepartementRepository(StartupContext context) : IDepartementReposit
         return department;
     }
 
-    public async Task<List<Departement>> GetAll()
+    public async Task<(List<DepartementDto> data , int totalDepartements)> GetAll(int pageNumber, int pageSize)
     {
-        var departments = await _context.Departements.ToListAsync();
-        return departments;
+        var departments = await _context.Departements
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+        
+        var totalDepartements = await _context.Departements.CountAsync();
+        var data = departments.Select(departement => new DepartementDto
+        {
+            Id = departement.Id,
+            Name = departement.Name,
+        }).ToList();
+        return (data, totalDepartements);
     }
 }

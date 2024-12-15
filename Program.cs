@@ -1,3 +1,4 @@
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using StartUpApi.Data;
 using StartUpApi.Data.Repositories;
@@ -13,6 +14,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<StartupContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Local")));
+builder.Services.AddMapster();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IDepartementService, DepartementService>();
 

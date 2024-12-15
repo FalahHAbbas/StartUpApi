@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MapsterMapper;
+using Microsoft.EntityFrameworkCore;
 using StartUpApi.Data.Repositories;
 using StartUpApi.Models.Dto;
 using StartUpApi.Models.Entities;
@@ -13,91 +14,52 @@ public interface IDepartementService
     Task<DepartementDto> Update(Guid id, DepartementForm departementForm);
     Task<DepartementDto> Delete(Guid id);
     Task<DepartementDto> GetById(Guid id);
-    Task<List<DepartementDto>> GetAll();
+    Task<(List<DepartementDto> data, int totalDepartements)> GetAll(int pageNumber, int pageSize);
 }
 
-public class DepartementService(IDepartementRepository departementRepository) : IDepartementService
+public class DepartementService(IDepartementRepository departementRepository, IMapper mapper) : IDepartementService
 {
     public async Task<DepartementDto> Create(DepartementForm departementForm)
     {
-        var departement = new Departement()
-        {
-            Id = Guid.NewGuid(),
-            Name = departementForm.Name,
-        };
-
+        var departement = mapper.Map<Departement>(departementForm);
         departement = await departementRepository.Create(departement);
-
-
-        return new DepartementDto
-        {
-            Id = departement.Id,
-            Name = departement.Name
-        };
+        return mapper.Map<DepartementDto>(departement);
     }
 
     public async Task<DepartementDto> Update(Guid id, DepartementForm departementForm)
     {
-        var department = await departementRepository.FindById(id);
-        department.Name = departementForm.Name;
-        await departementRepository.Update(department);
-        return new DepartementDto
-        {
-            Id = department.Id,
-            Name = department.Name
-        };
+        var department = mapper.Map<Departement>(await GetById(id));
+        department = await departementRepository.Update(department);
+        return mapper.Map<DepartementDto>(department);
     }
 
 
     public async Task<DepartementDto> Delete(Guid id)
     {
-        var departement = await departementRepository.Delete(id);
-
-        return new DepartementDto()
-        {
-            Id = departement.Id,
-            Name = departement.Name,
-        };
+        var departement = mapper.Map<Departement>(await GetById(id));
+        departement = await departementRepository.Delete(id);
+        return mapper.Map<DepartementDto>(departement);
     }
 
 
-    public async Task<List<DepartementDto>> FindAll()
+    public async Task<(List<DepartementDto>data, int totalCount)> FindAll(int pageNumber, int pageSize)
     {
-        var departements = await departementRepository.GetAll();
-        var departementDtos = new List<DepartementDto>();
-
-        foreach (var departement in departements)
-        {
-            var d = new DepartementDto()
-            {
-                Id = departement.Id,
-                Name = departement.Name,
-            };
-            departementDtos.Add(d);
-        }
-
-        return (departementDtos);
+        var result = await departementRepository.GetAll(pageNumber, pageSize);
+        var departementDtos = mapper.Map<List<DepartementDto>>(result.data);
+        return (departementDtos, result.totalDepartements);
     }
 
     public async Task<DepartementDto> GetById(Guid id)
     {
-        var user = await departementRepository.FindById(id);
-        return new DepartementDto
-        {
-            Id = user.Id,
-            Name = user.Name,
-        };
+        var departement = await departementRepository.FindById(id);
+        return mapper.Map<DepartementDto>(departement);
     }
 
-    public async Task<List<DepartementDto>> GetAll()
+    public async Task<(List<DepartementDto> data, int totalDepartements)> GetAll(int pageNumber, int pageSize)
     {
-        var deparments = await departementRepository.GetAll();
-
-        return deparments.Select(departement => new DepartementDto
-            {
-                Id = departement.Id,
-                Name = departement.Name
-            })
-            .ToList();
+        var result = await departementRepository.GetAll(pageNumber, pageSize);
+        var userdepartements = mapper.Map<List<DepartementDto>>(result.data);
+        return (userdepartements ,  result.totalDepartements);
+        
     }
 }

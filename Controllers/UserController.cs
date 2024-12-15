@@ -4,8 +4,10 @@ using StartUpApi.Models.Entities;
 using StartUpApi.Models.Form;
 using StartUpApi.Services;
 using System.Reflection.Metadata.Ecma335;
+using Microsoft.AspNetCore.Authorization;
 
 namespace StartUpApi.Controllers;
+
 
 [ApiController]
 [Route("api/[controller]")]
@@ -44,12 +46,7 @@ public class UserController(IUserService userService) : ControllerBase
     public async Task<ActionResult<Page<UserDto>>> GetAll(string? name, int pageNumber = 1, int pageSize = 10)
     {
         var users = await userService.GetAll(pageNumber, pageSize, name);
-        var page = new Page<UserDto>
-        {
-            Items = users.data,
-            CurrentPage = pageNumber,
-            PageCount = ((users.totalCount - 1) / pageSize) + 1
-        };
+        var page = new Page<UserDto>(users, pageNumber, pageSize);
         return Ok(page);
     }
 }

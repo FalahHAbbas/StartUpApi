@@ -4,11 +4,14 @@ using StartUpApi.Models.Entities;
 using StartUpApi.Models.Form;
 using StartUpApi.Services;
 using System.Reflection.Metadata.Ecma335;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace StartUpApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+
 
 
 public class DepartementController(IDepartementService departementService): ControllerBase
@@ -36,10 +39,11 @@ public class DepartementController(IDepartementService departementService): Cont
     }
 
     [HttpGet]
-    public async Task<ActionResult<DepartementDto>> GetAll()
+    public async Task<ActionResult<Page<DepartementDto>>> GetAll(int pageNumber, int pageSize)
     {
-        var departements = await departementService.GetAll();
-        return Ok(departements);
+        var departements = await departementService.GetAll(pageNumber, pageSize);
+        var page = new Page<DepartementDto>(departements, pageSize, pageNumber);
+        return Ok(page);
     }
     
 }
