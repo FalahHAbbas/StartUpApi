@@ -22,6 +22,21 @@ namespace StartUpApi.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("StartUpApi.Models.Entities.Departement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Departements");
+                });
+
             modelBuilder.Entity("StartUpApi.Models.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
