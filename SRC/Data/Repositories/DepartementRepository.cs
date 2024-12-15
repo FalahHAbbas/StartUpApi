@@ -13,6 +13,7 @@ public interface IDepartementRepository
     Task<Departement> Delete(Guid id);
     Task<Departement> FindById(Guid id);
     Task<List<Departement>> GetAll();
+    
 }
 
 public class DepartementRepository(StartupContext context) : IDepartementRepository
@@ -39,18 +40,19 @@ public class DepartementRepository(StartupContext context) : IDepartementReposit
         if (departement == null)
             throw new Exception("Departement not found");
         _context.Departements.Remove(departement);
-        await _context.SaveChangesAsync();  
+        await _context.SaveChangesAsync();
         return departement;
-        
     }
 
-    public Task<Departement> FindById(Guid id)
+    public async Task<Departement> FindById(Guid id)
     {
-        throw new NotImplementedException();
+        var department = await _context.Departements.FindAsync(id);
+        return department;
     }
 
-    public Task<List<Departement>> GetAll()
+    public async Task<List<Departement>> GetAll()
     {
-        throw new NotImplementedException();
+        var departments = await _context.Departements.ToListAsync();
+        return departments;
     }
 }
