@@ -20,27 +20,32 @@ public class DepartementService(IDepartementRepository departementRepository) : 
 {
     public async Task<DepartementDto> Create(DepartementForm departementForm)
     {
-        
-            var departement = new Departement()
-            {
-                Id = Guid.NewGuid(),
-                Name = departementForm.Name,
-                
-            };
-            
-            departement = await departementRepository.Create(departement);
+        var departement = new Departement()
+        {
+            Id = Guid.NewGuid(),
+            Name = departementForm.Name,
+        };
+
+        departement = await departementRepository.Create(departement);
 
 
-            return new DepartementDto
-            {
-                Id = departement.Id,
-                Name = departement.Name
-            };
+        return new DepartementDto
+        {
+            Id = departement.Id,
+            Name = departement.Name
+        };
     }
 
-    public Task<DepartementDto> Update(Guid id, DepartementForm departementForm)
+    public async Task<DepartementDto> Update(Guid id, DepartementForm departementForm)
     {
-        throw new NotImplementedException();
+        var department = await departementRepository.FindById(id);
+        department.Name = departementForm.Name;
+        await departementRepository.Update(department);
+        return new DepartementDto
+        {
+            Id = department.Id,
+            Name = department.Name
+        };
     }
 
 
@@ -54,25 +59,24 @@ public class DepartementService(IDepartementRepository departementRepository) : 
             Name = departement.Name,
         };
     }
-    
-    
+
+
     public async Task<List<DepartementDto>> FindAll()
-    { 
-            var departements = await departementRepository.GetAll();
-            var departementDtos = new List<DepartementDto>();
+    {
+        var departements = await departementRepository.GetAll();
+        var departementDtos = new List<DepartementDto>();
 
-            foreach (var departement in departements)
+        foreach (var departement in departements)
+        {
+            var d = new DepartementDto()
             {
-                var d = new DepartementDto()
-                {
-                    Id = departement.Id,
-                    Name = departement.Name,
+                Id = departement.Id,
+                Name = departement.Name,
+            };
+            departementDtos.Add(d);
+        }
 
-                };
-                departementDtos.Add(d);
-            }
-            return (departementDtos);
-
+        return (departementDtos);
     }
 
     public async Task<DepartementDto> GetById(Guid id)
@@ -85,8 +89,15 @@ public class DepartementService(IDepartementRepository departementRepository) : 
         };
     }
 
-    public Task<List<DepartementDto>> GetAll()
+    public async Task<List<DepartementDto>> GetAll()
     {
-        throw new NotImplementedException();
+        var deparments = await departementRepository.GetAll();
+
+        return deparments.Select(departement => new DepartementDto
+            {
+                Id = departement.Id,
+                Name = departement.Name
+            })
+            .ToList();
     }
 }
