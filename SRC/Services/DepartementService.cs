@@ -10,7 +10,7 @@ public interface IDepartementService
 {
     //TODO: Create Department Form And Dto then use them here
     Task<DepartementDto> Create(DepartementForm departementForm);
-    // Task<DepartementDto> Update(Guid id, DepartementForm departementForm);
+    Task<DepartementDto> Update(Guid id, DepartementForm departementForm);
     Task<DepartementDto> Delete(Guid id);
     Task<DepartementDto> GetById(Guid id);
     Task<List<DepartementDto>> GetAll();
@@ -36,6 +36,11 @@ public class DepartementService(IDepartementRepository departementRepository) : 
                 Id = departement.Id,
                 Name = departement.Name
             };
+    }
+
+    public Task<DepartementDto> Update(Guid id, DepartementForm departementForm)
+    {
+        throw new NotImplementedException();
     }
 
 
