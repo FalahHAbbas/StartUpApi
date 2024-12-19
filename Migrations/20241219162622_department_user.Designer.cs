@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StartUpApi.Data;
@@ -11,9 +12,11 @@ using StartUpApi.Data;
 namespace StartUpApi.Migrations
 {
     [DbContext(typeof(StartupContext))]
-    partial class StartupContextModelSnapshot : ModelSnapshot
+    [Migration("20241219162622_department_user")]
+    partial class department_user
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -19,5 +19,7 @@ public class Page<T>
         Items = data.items;
         PageCount = (data.totalCount - 1) / pageSize + 1;
         CurrentPage = pageSize;
+        
+        
     }
 }

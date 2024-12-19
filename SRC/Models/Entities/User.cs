@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StartUpApi.Models.Entities;
 
@@ -11,4 +12,8 @@ public class User
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
     public DateTime createdAt { get; set; } = DateTime.Now.ToUniversalTime();
+    
+    [ForeignKey(nameof(Departement))]
+    public Guid? DepartementId { get; set; }
+    public Departement? Departement { get; set; }
 }

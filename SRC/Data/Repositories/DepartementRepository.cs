@@ -13,8 +13,8 @@ public interface IDepartementRepository
     Task<Departement> Update(Departement departement);
     Task<Departement> Delete(Guid id);
     Task<Departement> FindById(Guid id);
-    Task<(List<DepartementDto> data, int totalDepartements)> GetAll(int pageSize = 10, int pageNumber = 0);
-    
+    Task<(List<Departement> data, int totalDepartements)> GetAll(int pageSize, int pageNumber);
+    Task<(List<User> users, int totalCount)> GetAllUsers(Guid id,int  pageNumber, int pageSize);
     
 }
 
@@ -51,8 +51,9 @@ public class DepartementRepository(StartupContext context) : IDepartementReposit
         var department = await _context.Departements.FindAsync(id);
         return department;
     }
+    
 
-    public async Task<(List<DepartementDto> data , int totalDepartements)> GetAll(int pageNumber, int pageSize)
+    public async Task<(List<Departement> data , int totalDepartements)> GetAll(int pageNumber, int pageSize)
     {
         var departments = await _context.Departements
             .Skip((pageNumber - 1) * pageSize)
@@ -60,11 +61,25 @@ public class DepartementRepository(StartupContext context) : IDepartementReposit
             .ToListAsync();
         
         var totalDepartements = await _context.Departements.CountAsync();
-        var data = departments.Select(departement => new DepartementDto
-        {
-            Id = departement.Id,
-            Name = departement.Name,
-        }).ToList();
-        return (data, totalDepartements);
+    
+        return (departments, totalDepartements);
+    }
+
+    
+    public async Task<(List<User> users, int totalCount)> GetAllUsers(Guid id, int  pageNumber, int pageSize)
+    {
+        var users= await _context.Users
+            .Where(u => u.DepartementId == id)
+            .Include(user => user.Departement)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+        
+        var totalUsers = await _context.Users
+            .Where(u => u.DepartementId == id)
+            .CountAsync();
+        
+        return (users, totalUsers);
+
     }
 }

@@ -1,6 +1,7 @@
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using StartUpApi.Data.Repositories;
+using StartUpApi.Migrations;
 using StartUpApi.Models.Dto;
 using StartUpApi.Models.Entities;
 using StartUpApi.Models.Form;
@@ -60,4 +61,6 @@ public class UserService(IUserRepository userRepository , IMapper mapper) : IUse
         user = await userRepository.Update(user);
         return mapper.Map<UserDto>(user);
     }
+    
 }
+

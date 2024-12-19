@@ -15,6 +15,7 @@ public interface IDepartementService
     Task<DepartementDto> Delete(Guid id);
     Task<DepartementDto> GetById(Guid id);
     Task<(List<DepartementDto> data, int totalDepartements)> GetAll(int pageNumber, int pageSize);
+    Task<(List<UserDto> data, int totalCount)> GetUsers(Guid id, int pageNumber, int pageSize);
 }
 
 public class DepartementService(IDepartementRepository departementRepository, IMapper mapper) : IDepartementService
@@ -59,7 +60,15 @@ public class DepartementService(IDepartementRepository departementRepository, IM
     {
         var result = await departementRepository.GetAll(pageNumber, pageSize);
         var userdepartements = mapper.Map<List<DepartementDto>>(result.data);
-        return (userdepartements ,  result.totalDepartements);
+        return (userdepartements, result.totalDepartements);
+    }
+
+    public async Task<(List<UserDto> data, int totalCount)> GetUsers(Guid id, int pageNumber, int pageSize)
+    {
+        var result = await departementRepository.GetAllUsers(id, pageNumber, pageSize);
+
+        var usersDtos = mapper.Map<List<UserDto>>(result.users);
         
+        return (usersDtos, result.totalCount);
     }
 }

@@ -6,18 +6,16 @@ using StartUpApi.Services;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using StartUpApi.Migrations;
 
 namespace StartUpApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-
-
-
-public class DepartementController(IDepartementService departementService): ControllerBase
+public class DepartementController(IDepartementService departementService) : ControllerBase
 {
     [HttpPost]
-    public async Task<ActionResult<DepartementDto>> Add([FromBody]DepartementForm departementForm)
+    public async Task<ActionResult<DepartementDto>> Add([FromBody] DepartementForm departementForm)
     {
         var departement = await departementService.Create(departementForm);
         return Ok(departement);
@@ -38,6 +36,13 @@ public class DepartementController(IDepartementService departementService): Cont
         return Ok(departement);
     }
 
+    [HttpGet("{id}")]
+    public async Task<ActionResult<UserDto>> GetById(Guid id)
+    {
+        var departement = await departementService.GetById(id);
+        return Ok(departement);
+    }
+
     [HttpGet]
     public async Task<ActionResult<Page<DepartementDto>>> GetAll(int pageNumber, int pageSize)
     {
@@ -45,5 +50,12 @@ public class DepartementController(IDepartementService departementService): Cont
         var page = new Page<DepartementDto>(departements, pageSize, pageNumber);
         return Ok(page);
     }
-    
+
+    [HttpGet("{id}/users")]
+    public async Task<ActionResult<Page<UserDto>>> GetUsersByDepartment(Guid id,int pageNumber=1, int pageSize=10)
+    {
+        var users = await departementService.GetUsers(id, pageNumber, pageSize);
+        var page = new Page<UserDto>(users, pageSize, pageNumber);
+        return Ok(page);
+    }
 }

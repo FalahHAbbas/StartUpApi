@@ -13,7 +13,7 @@ public interface IUserRepository
     Task<User> Delete(Guid id);
     Task<User> FindById(Guid id);
 
-    Task<(List<UserDto> data, int totalCount)> GetUsers(int pageNumber, int pageSize, string name);
+    Task<(List<User> data, int totalCount)> GetUsers(int pageNumber, int pageSize, string name);
 }
 
 public class UserRepository(StartupContext context) : IUserRepository
@@ -48,13 +48,17 @@ public class UserRepository(StartupContext context) : IUserRepository
     public async Task<User> FindById(Guid id)
 
     {
-        return await _context.Users.FindAsync(id);
+        return await _context.Users
+            .Include(user => user.Departement)
+            .FirstOrDefaultAsync(user => user.Id == id);
+
     }
 
-    public async Task<(List<UserDto> data, int totalCount)> GetUsers(int pageNumber, int pageSize, string? name)
+    public async Task<(List<User> data, int totalCount)> GetUsers(int pageNumber, int pageSize, string? name)
     {
         var users = await _context.Users
             .Where(user => name== null || user.Username.Contains(name))
+            .Include(user => user.Departement)
             .OrderByDescending(user => user.createdAt)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
@@ -62,13 +66,6 @@ public class UserRepository(StartupContext context) : IUserRepository
 
         var totalCount = await _context.Users
             .CountAsync();
-        var data = users.Select(x => new UserDto
-        {
-            Id = x.Id,
-            Username = x.Username,
-            Email = x.Email,
-            PhoneNumber = x.PhoneNumber
-        }).ToList();
-        return (data, totalCount);
+        return (users, totalCount);
     }
 }
