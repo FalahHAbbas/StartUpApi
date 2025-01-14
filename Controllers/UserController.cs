@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace StartUpApi.Controllers;
 
-
 [ApiController]
 [Route("api/[controller]")]
 public class UserController(IUserService userService) : ControllerBase
@@ -48,5 +47,12 @@ public class UserController(IUserService userService) : ControllerBase
         var users = await userService.GetAll(pageNumber, pageSize, name);
         var page = new Page<UserDto>(users, pageNumber, pageSize);
         return Ok(page);
+    }
+
+    [HttpPut("{id}/set-deparment/{departmentId}")]
+    public async Task<IActionResult> SetDepartment(Guid id, Guid departmentId)
+    {
+        var user = await userService.SetDepartment(id, departmentId);
+        return Ok(user);
     }
 }
