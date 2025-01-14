@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using StartUpApi.Data;
@@ -10,7 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options => {options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;});
+
 
 builder.Services.AddDbContext<StartupContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Local")));

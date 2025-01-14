@@ -6,14 +6,11 @@ namespace StartUpApi.Models.Entities;
 
 public class Departement
 {
-    [Key]
-    public Guid Id { get; set; }
+    [Key] public Guid Id { get; set; }
     public string Name { get; set; }
-    
-    public Guid DepartmentId { get; set; }
-    
-    
 
-    
+    public Guid? AdminId { get; set; }
 
+    [ForeignKey(nameof(AdminId))] 
+    public User? Admin { get; set; }
 }

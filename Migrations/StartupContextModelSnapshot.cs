@@ -28,7 +28,7 @@ namespace StartUpApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("DepartmentId")
+                    b.Property<Guid?>("AdminId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -36,6 +36,8 @@ namespace StartUpApi.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AdminId");
 
                     b.ToTable("Departements");
                 });
@@ -73,6 +75,15 @@ namespace StartUpApi.Migrations
                     b.HasIndex("DepartementId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("StartUpApi.Models.Entities.Departement", b =>
+                {
+                    b.HasOne("StartUpApi.Models.Entities.User", "Admin")
+                        .WithMany()
+                        .HasForeignKey("AdminId");
+
+                    b.Navigation("Admin");
                 });
 
             modelBuilder.Entity("StartUpApi.Models.Entities.User", b =>

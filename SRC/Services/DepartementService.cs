@@ -18,7 +18,10 @@ public interface IDepartementService
     Task<(List<UserDto> data, int totalCount)> GetUsers(Guid id, int pageNumber, int pageSize);
 }
 
-public class DepartementService(IDepartementRepository departementRepository, IMapper mapper) : IDepartementService
+public class DepartementService(
+    IDepartementRepository departementRepository,
+    IUserRepository userRepository,
+    IMapper mapper) : IDepartementService
 {
     public async Task<DepartementDto> Create(DepartementForm departementForm)
     {
@@ -68,7 +71,7 @@ public class DepartementService(IDepartementRepository departementRepository, IM
         var result = await departementRepository.GetAllUsers(id, pageNumber, pageSize);
 
         var usersDtos = mapper.Map<List<UserDto>>(result.users);
-        
+
         return (usersDtos, result.totalCount);
     }
 }

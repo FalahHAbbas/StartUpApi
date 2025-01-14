@@ -56,6 +56,7 @@ public class DepartementRepository(StartupContext context) : IDepartementReposit
     public async Task<(List<Departement> data , int totalDepartements)> GetAll(int pageNumber, int pageSize)
     {
         var departments = await _context.Departements
+            .Include(departement => departement.Admin)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
