@@ -17,6 +17,8 @@ public interface IUserService
 
     Task<(List<UserDto> data, int totalCount)> GetAll(int pageNumber, int pageSize, string name);
     Task<UserDto?> SetDepartment(Guid id, Guid departmentId);
+    Task<UserDto?> GetAdminById(Guid id);
+    
 }
 
 public class UserService(IUserRepository userRepository, IMapper mapper) : IUserService
@@ -50,6 +52,16 @@ public class UserService(IUserRepository userRepository, IMapper mapper) : IUser
         return mapper.Map<UserDto>(user);
     }
 
+    public async Task<UserDto?> GetAdminById(Guid id)
+    {
+        var user = await userRepository.FindById(id);
+        var adminId = user.Departement!.AdminId!;
+        var admin = await userRepository.FindById(adminId.Value);
+        return mapper.Map<UserDto>(admin);
+
+
+    }
+
     public async Task<UserDto> GetById(Guid id)
     {
         var user = await userRepository.FindById(id);
@@ -60,7 +72,6 @@ public class UserService(IUserRepository userRepository, IMapper mapper) : IUser
     public async Task<UserDto> Update(Guid id, UserForm userForm)
     {
         var user = await userRepository.FindById(id);
-
         if (user == null)
         {
             throw new Exception("User not found");

@@ -3,6 +3,7 @@ using Mapster;
 using Microsoft.EntityFrameworkCore;
 using StartUpApi.Data;
 using StartUpApi.Data.Repositories;
+using StartUpApi.Models.Entities;
 using StartUpApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,10 @@ builder.Services.AddScoped<IDepartementService, DepartementService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IDepartementRepository, DepartementRepository>();
+
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+
 
 
 

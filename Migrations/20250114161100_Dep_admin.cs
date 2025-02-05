@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace StartUpApi.Migrations
 {
     /// <inheritdoc />
-    public partial class Depratment_Admin : Migration
+    public partial class Dep_admin : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

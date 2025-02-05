@@ -58,4 +58,11 @@ public class DepartementController(IDepartementService departementService) : Con
         var page = new Page<UserDto>(users, pageSize, pageNumber);
         return Ok(page);
     }
+
+    [HttpPut("{id}/set-Admin/{adminId}")]
+    public async Task<ActionResult> SetAdmin(Guid id, Guid adminId)
+    {
+        var user = await departementService.SetAdmin(id, adminId);
+        return Ok(user);
+    }
 }

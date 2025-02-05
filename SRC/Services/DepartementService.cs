@@ -16,6 +16,7 @@ public interface IDepartementService
     Task<DepartementDto> GetById(Guid id);
     Task<(List<DepartementDto> data, int totalDepartements)> GetAll(int pageNumber, int pageSize);
     Task<(List<UserDto> data, int totalCount)> GetUsers(Guid id, int pageNumber, int pageSize);
+    Task<DepartementDto> SetAdmin(Guid id, Guid userId);
 }
 
 public class DepartementService(
@@ -73,5 +74,13 @@ public class DepartementService(
         var usersDtos = mapper.Map<List<UserDto>>(result.users);
 
         return (usersDtos, result.totalCount);
+    }
+
+    public async Task<DepartementDto> SetAdmin(Guid id, Guid userId)
+    {
+        var department =await departementRepository.FindById(id);
+        department.AdminId = userId;
+        await departementRepository.Update(department);
+        return mapper.Map<DepartementDto>(department);
     }
 }

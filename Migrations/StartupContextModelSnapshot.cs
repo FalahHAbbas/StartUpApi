@@ -22,6 +22,21 @@ namespace StartUpApi.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("ProjectUser", b =>
+                {
+                    b.Property<Guid>("ProjectsId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UsersId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ProjectsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("ProjectUser");
+                });
+
             modelBuilder.Entity("StartUpApi.Models.Entities.Departement", b =>
                 {
                     b.Property<Guid>("Id")
@@ -40,6 +55,26 @@ namespace StartUpApi.Migrations
                     b.HasIndex("AdminId");
 
                     b.ToTable("Departements");
+                });
+
+            modelBuilder.Entity("StartUpApi.Models.Entities.Project", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("DepartmentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("StartUpApi.Models.Entities.User", b =>
@@ -77,6 +112,21 @@ namespace StartUpApi.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("ProjectUser", b =>
+                {
+                    b.HasOne("StartUpApi.Models.Entities.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StartUpApi.Models.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("StartUpApi.Models.Entities.Departement", b =>
                 {
                     b.HasOne("StartUpApi.Models.Entities.User", "Admin")
@@ -84,6 +134,15 @@ namespace StartUpApi.Migrations
                         .HasForeignKey("AdminId");
 
                     b.Navigation("Admin");
+                });
+
+            modelBuilder.Entity("StartUpApi.Models.Entities.Project", b =>
+                {
+                    b.HasOne("StartUpApi.Models.Entities.Departement", "Departement")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId");
+
+                    b.Navigation("Departement");
                 });
 
             modelBuilder.Entity("StartUpApi.Models.Entities.User", b =>

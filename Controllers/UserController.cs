@@ -54,5 +54,13 @@ public class UserController(IUserService userService) : ControllerBase
     {
         var user = await userService.SetDepartment(id, departmentId);
         return Ok(user);
+        
+    }
+
+    [HttpGet("{id}/get-Admin")]
+    public async Task<ActionResult<UserDto>> GetAdminById(Guid id)
+    {
+        var user = await userService.GetAdminById(id);
+        return Ok(user);    
     }
 }

@@ -7,4 +7,5 @@ public class StartupContext(DbContextOptions<StartupContext> options) : DbContex
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Departement> Departements { get; set; }
+    public DbSet<Project> Projects { get; set; }
 }
